@@ -1,0 +1,52 @@
+version: '2.2'
+
+services:
+
+  auth-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: dbpas-change-it
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+
+  auth-service:
+    image: marczakx/auth:2
+    environment:
+      SPRING_DATASOURCE_PASSWORD: dbpas-change-it
+      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      JWT_SECRET: ++++++++++++++++++++++CHANGE+IT+++++++++++++++++++++++++++++++++
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  auth-liquibase:
+    image: liquibase/liquibase
+    volumes:
+      - ./vol/liquibase/:/liquibase/changelog/
+    command: update --url=jdbc:postgresql://auth-db:5432/postgres --changelog-file=changelog.xml  --username=postgres --password=dbpas-change-it
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  github-info:
+    image: marczakx/github-info:3
+# Without a token there are low rate limits. To use the token set the GITHUB_TOKEN environment variable
+#    environment:
+#      GITHUB_TOKEN: github_pat_++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./vol/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 3380:80
+    depends_on:
+      - auth-service
+      - github-info
+

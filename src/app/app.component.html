@@ -3,7 +3,7 @@
   <button mat-icon-button aria-label="Menu icon" (click)="toggleMenu()">
     <mat-icon>menu</mat-icon>
   </button>
-  <a mat-stroked-button [routerLink]="'repos'">Repozytories</a> 
+  <a mat-stroked-button [routerLink]="'repos'">Repositories</a> 
   <a mat-stroked-button [routerLink]="'login'">Login</a>
   <a mat-stroked-button href="https://github.com/marczakx/github-info-front">Code</a>
   <a mat-stroked-button (click)="info()">Info</a> 
@@ -16,7 +16,7 @@
                  [mode]="isMobile ? 'over' : 'side'" 
                  [opened]="isMobile ? 'false' : 'true'">
       <span class="entry">
-        <span *ngIf="!isCollapsed"> <a mat-stroked-button [routerLink]="'repos'">Repozytories</a></span>
+        <span *ngIf="!isCollapsed"> <a mat-stroked-button [routerLink]="'repos'">Repositories</a></span>
       </span>
       <span class="entry">
         <span *ngIf="!isCollapsed"> <a mat-stroked-button [routerLink]="'login'">Login</a></span>

@@ -1,0 +1,33 @@
+<div class="container" cdkDrag>
+
+  <div class="subcontainer" cdkDrag> 
+    <h2>Enter the GitHub user you want to get data for </h2>
+  </div>
+
+  <div class="subcontainer" cdkDrag>
+    <mat-form-field class="field">
+      <mat-label>GitHub user</mat-label>
+      <input matInput [type]="'text'" #gituser>
+    </mat-form-field>
+    <div  cdkDrag>
+      <button class="field" mat-raised-button color="primary" (click)="repos(gituser.value)">OK</button>
+    </div>
+  </div>
+
+  <div class="subcontainer" cdkDrag>
+    <mat-accordion>
+      <mat-expansion-panel  *ngFor="let repo of data">
+        <mat-expansion-panel-header>{{repo.name}}</mat-expansion-panel-header>
+        <mat-accordion>
+          <mat-expansion-panel  *ngFor="let branche of repo.branches">
+            <mat-expansion-panel-header>{{branche.name}}</mat-expansion-panel-header>
+              <p>Last commit:</p>
+              <p>message: {{branche.lastCommit.message}}</p>
+              <p>sha: {{branche.lastCommit.sha}}</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+      </mat-expansion-panel>
+    </mat-accordion>
+ </div>
+
+</div>
